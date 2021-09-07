@@ -5,3 +5,28 @@
 ###                                                                               ###
 ### You can find the source code at: https://github.com/Xitee1/DeathLocation      ###
 #####################################################################################
+
+##############
+### Config ###
+##############
+# Where should the location be displayed?
+types:
+  chat-message: true
+  actionbar: true
+  title: false
+
+# Should every player on the server see the location 
+# Only recommended if you want that other players are easily able to steal someone's stuff or find their base!
+allPlayers: false
+
+message:
+  append: false # The location will be appended to the existing death message (only chat). Warning: Every player will see the location, like the "allPlayers" option!
+  message: '&4You died at &b%x %y %z' # Placeholders: %player, %x, %y, %z
+  
+  
+######################
+### Plugin Updater ###
+######################
+update:
+  notification: true # Send a message to all Admins on join if a new update is available
+  autoupdater: false # With this option, the plugin will be automatically updatet
