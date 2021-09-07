@@ -27,6 +27,8 @@ public class DeathLocation extends JavaPlugin {
 		// Start the ActionBar Manager
 		if(pl.getConfig().getBoolean("types.actionbar"))
 			Actionbar.start();
+
+		BStats();
 	}
 	
 	@Override
@@ -34,5 +36,22 @@ public class DeathLocation extends JavaPlugin {
 		if(pl.getConfig().getBoolean("update.autoupdater"))
 			if(Updater.checkVersion())
 				Updater.downloadFile();
+	}
+
+
+	public void BStats(){
+		// BStats analytics
+		try {
+			int pluginId = 6722; // <-- Replace with the id of your plugin!
+	        BStatsMetrics metrics = new BStatsMetrics(pl, pluginId);
+	        //Costom charts
+	        metrics.addCustomChart(new BStatsMetrics.SimplePie("update_auto_update", () -> pl.getConfig().getBoolean("update.autoupdater") ? "Aktiviert" : "Deaktiviert"));
+	        metrics.addCustomChart(new BStatsMetrics.SimplePie("update_notifications", () -> pl.getConfig().getBoolean("update.notification") ? "Aktiviert" : "Deaktiviert"));
+	        
+	        if(Main.debug)
+	        	pl.getLogger().info("Analytics sent to BStats");
+		} catch (Exception e) {
+			pl.getLogger().warning("Could not send analytics to BStats!");
+		}
 	}
 }
