@@ -29,4 +29,9 @@ message:
 ######################
 update:
   notification: true # Send a message to all Admins on join if a new update is available
-  autoupdater: false # With this option, the plugin will be automatically updatet
+  autoupdater: false # With this option, the plugin will be automatically updatet#
+  
+################################################
+#### The debug can help you to find problems ###
+################################################
+debug: false
