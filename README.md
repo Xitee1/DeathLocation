@@ -1,4 +1,4 @@
-# DeathLocation
+# Minecraft DeathLocation
 Displays the location where a player died
 
 ## Download
