@@ -59,7 +59,7 @@ public class DeathLocation extends JavaPlugin {
 
 			metrics.addCustomChart(new BStatsMetrics.SimplePie("use_chat_message", () -> pl.getConfig().getBoolean("types.chat-message") ? "Aktiviert" : "Deaktiviert"));
 			metrics.addCustomChart(new BStatsMetrics.SimplePie("use_actionbar", () -> pl.getConfig().getBoolean("types.actiobar") ? "Aktiviert" : "Deaktiviert"));
-			metrics.addCustomChart(new BStatsMetrics.SimplePie("use_actionbar", () -> pl.getConfig().getBoolean("types.title") ? "Aktiviert" : "Deaktiviert"));
+			metrics.addCustomChart(new BStatsMetrics.SimplePie("use_title", () -> pl.getConfig().getBoolean("types.title") ? "Aktiviert" : "Deaktiviert"));
 			
 			metrics.addCustomChart(new BStatsMetrics.SimplePie("allplayers", () -> pl.getConfig().getBoolean("allPlayers") ? "Aktiviert" : "Deaktiviert"));
 			
