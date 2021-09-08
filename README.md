@@ -2,7 +2,7 @@
 Displays the location where a player died
 
 ## Download
-Coming soon
+https://www.spigotmc.org/resources/deathlocation.96051/
 
 ## How it works
 1. Download the plugin and put it on your Minecraft Server in the plugins folder.
