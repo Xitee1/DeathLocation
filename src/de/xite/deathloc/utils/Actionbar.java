@@ -25,13 +25,13 @@ public class Actionbar {
     	counter.put(p, seconds);
     }
 
-    public static void start() {
+    public static void startActionbarService() {
     	pl.getLogger().info("ActionBar manager started.");
     	Bukkit.getScheduler().scheduleSyncRepeatingTask(pl, () -> {
 			for(Player p : counter.keySet()) {
 				int count = counter.get(p) - 1;
 
-				if(count <= 0) {
+				if(count > 0) {
 					counter.replace(p, count);
 					sendActionBar(p, message.get(p));
 				}else {

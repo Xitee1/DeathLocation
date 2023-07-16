@@ -35,7 +35,7 @@ public class DeathLocation extends JavaPlugin {
 		
 		// Start the ActionBar Manager
 		if(pl.getConfig().getBoolean("types.actionbar"))
-			Actionbar.start();
+			Actionbar.startActionbarService();
 
 		BStats();
 	}

@@ -13,6 +13,9 @@ types:
   actionbar: true
   title: false
 
+actionbar:
+  timeout: 15 # Duration to show the actionbar for (in seconds)
+
 # Send the message to all players on the server?
 # Only recommended if you want that other players are easily able to steal someone's stuff or find their base!
 allPlayers: false

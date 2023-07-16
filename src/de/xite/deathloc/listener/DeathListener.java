@@ -59,9 +59,9 @@ public class DeathListener implements Listener{
 		if(pl.getConfig().getBoolean("types.actionbar")) {
 			if(pl.getConfig().getBoolean("allPlayers")) {
 				for(Player all : Bukkit.getOnlinePlayers())
-					Actionbar.sendActionBar(all, message, 15);
+					Actionbar.sendActionBar(all, message, pl.getConfig().getInt("actionbar.timeout"));
 			}else {
-				Actionbar.sendActionBar(p, message, 15);
+				Actionbar.sendActionBar(p, message, pl.getConfig().getInt("actionbar.timeout"));
 			}
 		}
 
