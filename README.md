@@ -14,6 +14,10 @@ This plugin is also available at [SpigotMC](https://www.spigotmc.org/resources/d
 4. Restart your Server again to apply the changes.
 5. You're finished!
 
+# Compatibility
+This plugin has been tested with Minecraft Version 1.20.1 on Spigot.<br>
+However, it should be compatible with almost all versions. Just put it on your server and see if it works.
+
 # Features
 - Displays the location in the chat (It's also possible to append the location to the existing death message).
 - Displays the location in the ActionBar.
