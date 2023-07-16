@@ -39,12 +39,6 @@ public class DeathLocation extends JavaPlugin {
 
 		BStats();
 	}
-	
-	@Override
-	public void onDisable() {
-
-	}
-
 
 	public void BStats(){
 		// BStats analytics

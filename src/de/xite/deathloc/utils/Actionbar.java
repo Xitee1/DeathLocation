@@ -27,19 +27,16 @@ public class Actionbar {
 
     public static void start() {
     	pl.getLogger().info("ActionBar manager started.");
-    	Bukkit.getScheduler().scheduleSyncRepeatingTask(pl, new Runnable() {
-			@Override
-			public void run() {
-				for(Player p : counter.keySet()) {
-					int count = counter.get(p) - 1;
+    	Bukkit.getScheduler().scheduleSyncRepeatingTask(pl, () -> {
+			for(Player p : counter.keySet()) {
+				int count = counter.get(p) - 1;
 
-					if(count <= 0) {
-						counter.replace(p, count);
-						sendActionBar(p, message.get(p));
-					}else {
-						counter.remove(p);
-						message.remove(p);
-					}
+				if(count <= 0) {
+					counter.replace(p, count);
+					sendActionBar(p, message.get(p));
+				}else {
+					counter.remove(p);
+					message.remove(p);
 				}
 			}
 		}, 20, 20);

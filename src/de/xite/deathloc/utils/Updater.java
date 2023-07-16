@@ -1,10 +1,7 @@
 package de.xite.deathloc.utils;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 
@@ -15,8 +12,9 @@ import de.xite.deathloc.main.DeathLocation;
 
 public class Updater {
 	private static DeathLocation pl = DeathLocation.pl;
-	private static int pluginID = 96051;
+	final private static int pluginID = 96051;
 	public static String version;
+
     public static String getVersion() {
         try (InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + pluginID).openStream(); Scanner scanner = new Scanner(inputStream)) {
             if (scanner.hasNext()) {
@@ -34,12 +32,7 @@ public class Updater {
     	if(version == null) {
     		version = getVersion();
     		// Check again after 24h
-    		Bukkit.getScheduler().runTaskLater(pl, new Runnable() {
-				@Override
-				public void run() {
-					version = null;
-				}
-			}, 20*60*60*24);
+    		Bukkit.getScheduler().runTaskLater(pl, () -> version = null, 20*60*60*24);
     	}
 
 		return !version.equals(pl.getDescription().getVersion());
