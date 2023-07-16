@@ -11,30 +11,30 @@ import de.xite.deathloc.main.DeathLocation;
 
 
 public class Updater {
-	private static DeathLocation pl = DeathLocation.pl;
 	final private static int pluginID = 96051;
+
 	public static String version;
 
     public static String getVersion() {
-        try (InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + pluginID).openStream(); Scanner scanner = new Scanner(inputStream)) {
-            if (scanner.hasNext()) {
-            	String d = scanner.next();
-            	version = d;
-                return d;
+        if(version == null) {
+            try (InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + pluginID).openStream(); Scanner scanner = new Scanner(inputStream)) {
+                if (scanner.hasNext()) {
+                    String d = scanner.next();
+                    version = d;
+                    return d;
+                }
+            } catch (IOException e) {
+                DeathLocation.pl.getLogger().info("Updater -> Cannot look for updates: " + e.getMessage());
+                return "Could not check for updates! You probably restarted your server to often, so SpigotMC blocked your IP. You probably have to wait a few minutes or hours.";
             }
-        } catch (IOException e) {
-            pl.getLogger().info("Updater -> Cannot look for updates: " + e.getMessage());
+
+            // Set it to null again after 24h to check again (there might be a new version)
+            Bukkit.getScheduler().runTaskLaterAsynchronously(DeathLocation.pl, () -> version = null, 20*60*60*24);
         }
-        return "Could not check for updates! You probably restarted your server to often, so SpigotMC blocked your IP.";
+        return version;
     }
     
     public static boolean checkVersion() {
-    	if(version == null) {
-    		version = getVersion();
-    		// Check again after 24h
-    		Bukkit.getScheduler().runTaskLater(pl, () -> version = null, 20*60*60*24);
-    	}
-
-		return !version.equals(pl.getDescription().getVersion());
+		return !getVersion().equals(DeathLocation.pl.getDescription().getVersion());
 	}
 }
