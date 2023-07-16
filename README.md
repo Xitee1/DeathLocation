@@ -4,7 +4,7 @@ This plugin helps you with that.
 If you (or any other player on your server) dies, the location will be displayed in the chat / actionbar / title.
 
 ## Download
-Check out the [Releases](https://github.com/Xitee1/DeathLocation/releases).
+Check out the [Releases](https://github.com/Xitee1/DeathLocation/releases).<br>
 This plugin is also available at [SpigotMC](https://www.spigotmc.org/resources/deathlocation.96051/).
 
 ## Install
