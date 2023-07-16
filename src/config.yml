@@ -1,7 +1,5 @@
 #####################################################################################
-### DeathLocation                                                                 ###
-###                                                                               ###
-### For bugreports and proposals join our Discord: https://discord.gg/p95cB9YQFJ  ###
+### DeathLocation - Shows the location where you died                             ###
 ###                                                                               ###
 ### You can find the source code at: https://github.com/Xitee1/DeathLocation      ###
 #####################################################################################
@@ -9,29 +7,29 @@
 ##############
 ### Config ###
 ##############
-# Where should the location be displayed?
+# Where to send the location info
 types:
   chat-message: true
   actionbar: true
   title: false
 
-# Should every player on the server see the location 
+# Send the message to all players on the server?
 # Only recommended if you want that other players are easily able to steal someone's stuff or find their base!
 allPlayers: false
 
 message:
   append: false # The location will be appended to the existing death message (only chat). Warning: Every player will see the location, like the "allPlayers" option!
   message: '&4You died at &b%x %y %z' # Placeholders: %player, %x, %y, %z
-  
-  
+
+
 ######################
 ### Plugin Updater ###
 ######################
+# Notifies all admins about a new version
 update:
-  notification: true # Send a message to all Admins on join if a new update is available
-  autoupdater: false # With this option, the plugin will be automatically updatet#
+  notification: true
   
-################################################
-#### The debug can help you to find problems ###
-################################################
+#############################################
+#### The debug can help you find problems ###
+#############################################
 debug: false

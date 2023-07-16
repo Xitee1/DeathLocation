@@ -1,1 +1,4 @@
-/bin/
+bin/
+target/
+.idea
+DeathLocation.iml

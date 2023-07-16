@@ -1,12 +1,13 @@
 package de.xite.deathloc.main;
 
+import de.xite.deathloc.listener.DeathListener;
+import de.xite.deathloc.listener.JoinListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.xite.deathloc.utils.Actionbar;
 import de.xite.deathloc.utils.BStatsMetrics;
-import de.xite.deathloc.utils.Updater;
 import net.md_5.bungee.api.ChatColor;
 
 public class DeathLocation extends JavaPlugin {
@@ -25,8 +26,7 @@ public class DeathLocation extends JavaPlugin {
 		pl.reloadConfig();
 		
 		// Check if debug is enabled
-		if(pl.getConfig().getBoolean("debug"))
-			debug = true;
+		debug = pl.getConfig().getBoolean("debug");
 		
 		// Register listeners
 		PluginManager pm = Bukkit.getPluginManager();
@@ -42,9 +42,7 @@ public class DeathLocation extends JavaPlugin {
 	
 	@Override
 	public void onDisable() {
-		if(pl.getConfig().getBoolean("update.autoupdater"))
-			if(Updater.checkVersion())
-				Updater.downloadFile();
+
 	}
 
 
@@ -64,12 +62,11 @@ public class DeathLocation extends JavaPlugin {
 			metrics.addCustomChart(new BStatsMetrics.SimplePie("allplayers", () -> pl.getConfig().getBoolean("allPlayers") ? "Aktiviert" : "Deaktiviert"));
 			
 			metrics.addCustomChart(new BStatsMetrics.SimplePie("message_append", () -> pl.getConfig().getBoolean("message.append") ? "Aktiviert" : "Deaktiviert"));
-			
-			
+
 			if(debug)
-				pl.getLogger().info("Analytics sent to BStats");
+				pl.getLogger().info("Analytics sent to BStat.");
 		} catch (Exception e) {
-			pl.getLogger().warning("Could not send analytics to BStats!");
+			pl.getLogger().warning("Could not send analytics to BStats.");
 		}
 	}
 }

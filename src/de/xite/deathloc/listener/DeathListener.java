@@ -1,7 +1,8 @@
-package de.xite.deathloc.main;
+package de.xite.deathloc.listener;
 
 import java.util.HashMap;
 
+import de.xite.deathloc.main.DeathLocation;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -26,13 +27,25 @@ public class DeathListener implements Listener{
 		int y = loc.getBlockY();
 		int z = loc.getBlockZ();
 		
-		String message = pl.getConfig().getString("message.message")
-				.replace("%x", x+"").replace("%y", y+"").replace("%z", z+"")
-				.replace("%player", p.getName());
+		String message = pl.getConfig().getString("message.message");
+		if(message == null) {
+			pl.getLogger().severe("Error: No message found (message.message). Please fix your config.");
+			return;
+		}
+
+		message = message
+				.replace("%x", String.valueOf(x))
+				.replace("%y", String.valueOf(y))
+				.replace("%z", String.valueOf(z))
+				.replace("%player", p.getName())
+				.replace("%displayname", p.getDisplayName());
+
 		message = ChatColor.translateAlternateColorCodes('&', message);
+
+		// Send message in chat
 		if(pl.getConfig().getBoolean("types.chat-message")) {
 			if(pl.getConfig().getBoolean("message.append")) {
-				e.setDeathMessage(e.getDeathMessage()+message);
+				e.setDeathMessage(e.getDeathMessage() + message);
 			}else {
 				if(pl.getConfig().getBoolean("allPlayers")) {
 					Bukkit.broadcastMessage(message);
@@ -41,6 +54,8 @@ public class DeathListener implements Listener{
 				}
 			}
 		}
+
+		// Send message to actionbar
 		if(pl.getConfig().getBoolean("types.actionbar")) {
 			if(pl.getConfig().getBoolean("allPlayers")) {
 				for(Player all : Bukkit.getOnlinePlayers())
@@ -49,16 +64,12 @@ public class DeathListener implements Listener{
 				Actionbar.sendActionBar(p, message, 15);
 			}
 		}
+
+
 		if(pl.getConfig().getBoolean("types.title")) {
 			waitRespawn.put(p, message);
-			// If the player doesn't respawn within 10 minutes, we remove him from the list
-			Bukkit.getScheduler().runTaskLater(pl, new Runnable() {
-				@Override
-				public void run() {
-					if(waitRespawn.containsKey(p))
-						waitRespawn.remove(p);
-				}
-			}, 20*60*10);
+			// If the player doesn't respawn within 10 minutes, we remove him from the list.
+			Bukkit.getScheduler().runTaskLater(pl, () -> waitRespawn.remove(p), 20*60*10);
 		}
 	}
 	
@@ -66,10 +77,9 @@ public class DeathListener implements Listener{
 	public void onRespawn(PlayerRespawnEvent e) {
 		Player p = e.getPlayer();
 		if(waitRespawn.containsKey(p)) {
-			
 			if(pl.getConfig().getBoolean("allPlayers")) {
 				for(Player all : Bukkit.getOnlinePlayers())
-					p.sendTitle(waitRespawn.get(all), "", 5, 20, 5);
+					all.sendTitle(waitRespawn.get(p), "", 5, 20, 5);
 			}else {
 				p.sendTitle(waitRespawn.get(p), "", 5, 20*10, 5);
 			}

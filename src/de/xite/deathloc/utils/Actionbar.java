@@ -12,26 +12,28 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class Actionbar {
 	static DeathLocation pl = DeathLocation.pl;
 	
-    static HashMap<Player, Integer> counter = new HashMap<Player, Integer>();
-    static HashMap<Player, String> message = new HashMap<Player, String>();
+    static HashMap<Player, Integer> counter = new HashMap<>();
+    static HashMap<Player, String> message = new HashMap<>();
     
     public static void sendActionBar(Player p, String msg) {
     	p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg));
     }
+
     public static void sendActionBar(Player p, String msg, int seconds) {
     	p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg));
     	message.put(p, msg);
     	counter.put(p, seconds);
     }
+
     public static void start() {
-    	pl.getLogger().info("ActionBar manager started!");
+    	pl.getLogger().info("ActionBar manager started.");
     	Bukkit.getScheduler().scheduleSyncRepeatingTask(pl, new Runnable() {
 			@Override
 			public void run() {
 				for(Player p : counter.keySet()) {
-					int count = counter.get(p);
-					count--;
-					if(count != 0) {
+					int count = counter.get(p) - 1;
+
+					if(count <= 0) {
 						counter.replace(p, count);
 						sendActionBar(p, message.get(p));
 					}else {

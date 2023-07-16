@@ -15,7 +15,7 @@ import de.xite.deathloc.main.DeathLocation;
 
 public class Updater {
 	private static DeathLocation pl = DeathLocation.pl;
-	private static int pluginID = 73854;
+	private static int pluginID = 96051;
 	public static String version;
     public static String getVersion() {
         try (InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + pluginID).openStream(); Scanner scanner = new Scanner(inputStream)) {
@@ -33,50 +33,15 @@ public class Updater {
     public static boolean checkVersion() {
     	if(version == null) {
     		version = getVersion();
-    		// Set it to null again after an hour to check again
+    		// Check again after 24h
     		Bukkit.getScheduler().runTaskLater(pl, new Runnable() {
 				@Override
 				public void run() {
 					version = null;
 				}
-			}, 20*60*60);
+			}, 20*60*60*24);
     	}
-    	
-    	if(version.equals(pl.getDescription().getVersion()))
-    		return false;
-    	return true;
-    }
-	public static boolean downloadFile() {
-	    try {
-	    	pl.getLogger().info("Updater -> Downloading newest version...");
-			File file = new File("plugins/"+pl.getDescription().getName()+".jar");
-			if(!file.exists()) {
-				try {
-					file.createNewFile();
-		        }catch(IOException e) {
-		        	e.printStackTrace();
-		        	return false;
-		        } 
-			}
-	    	String url = "https://xitecraft.de/downloads/"+pl.getDescription().getName()+".jar";
-		    HttpURLConnection connection = (HttpURLConnection)(new URL(url)).openConnection();
-		    connection.connect();
-		    FileOutputStream outputStream = new FileOutputStream(file);
-		    InputStream inputStream = connection.getInputStream();
-		    byte[] buffer = new byte[1024];
-		    int readBytes = 0;    
-		    while ((readBytes = inputStream.read(buffer)) > 0) {
-		    	outputStream.write(buffer, 0, readBytes);
-		    }
-		    outputStream.close();
-		    inputStream.close();
-		    connection.disconnect();
-		    pl.getLogger().info("Updater -> Download finished! To apply the new update, you have to restart your server.");
-		    return true;
-	    }catch(Exception e) {
-	    	pl.getLogger().info("Updater -> Download failed! Please try it later again.");
-	    	e.printStackTrace();
-	    	return false;
-		}
+
+		return !version.equals(pl.getDescription().getVersion());
 	}
 }

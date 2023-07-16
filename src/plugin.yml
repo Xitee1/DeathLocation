@@ -1,5 +1,5 @@
 name: DeathLocation
-version: 1.0
+version: 1.1
 author: Xitee
 main: de.xite.deathloc.main.DeathLocation
-api-version: 1.17
+api-version: 1.13
