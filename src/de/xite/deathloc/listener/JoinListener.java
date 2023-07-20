@@ -16,9 +16,7 @@ public class JoinListener implements Listener {
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
-		if(pl.getConfig().getBoolean("update.notification")
-				&& p.hasPermission("deathlocation.update") || p.isOp()
-				&& Updater.checkVersion()) {
+		if((pl.getConfig().getBoolean("update.notification") || p.isOp()) && Updater.checkVersion()) {
 			p.sendMessage(DeathLocation.pr+ChatColor.RED+"A new update is available ("+ChatColor.AQUA+"v"+Updater.version+ChatColor.RED+")! Your version: "+ChatColor.AQUA+pl.getDescription().getVersion());
 		}
 	}

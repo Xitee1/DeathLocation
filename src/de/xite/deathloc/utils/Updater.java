@@ -17,11 +17,10 @@ public class Updater {
 
     public static String getVersion() {
         if(version == null) {
-            try (InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + pluginID).openStream(); Scanner scanner = new Scanner(inputStream)) {
-                if (scanner.hasNext()) {
+            try(InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + pluginID).openStream(); Scanner scanner = new Scanner(inputStream)) {
+                if(scanner.hasNext()) {
                     String d = scanner.next();
                     version = d;
-                    return d;
                 }
             } catch (IOException e) {
                 DeathLocation.pl.getLogger().info("Updater -> Cannot look for updates: " + e.getMessage());
@@ -31,6 +30,7 @@ public class Updater {
             // Set it to null again after 24h to check again (there might be a new version)
             Bukkit.getScheduler().runTaskLaterAsynchronously(DeathLocation.pl, () -> version = null, 20*60*60*24);
         }
+
         return version;
     }
     
