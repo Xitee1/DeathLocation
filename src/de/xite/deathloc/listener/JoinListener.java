@@ -11,13 +11,15 @@ import de.xite.deathloc.utils.Updater;
 
 
 public class JoinListener implements Listener {
-	DeathLocation pl = DeathLocation.pl;
+	Updater updater = DeathLocation.getUpdater();
 	
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
-		if((pl.getConfig().getBoolean("update.notification") || p.isOp()) && Updater.checkVersion()) {
-			p.sendMessage(DeathLocation.pr+ChatColor.RED+"A new update is available ("+ChatColor.AQUA+"v"+Updater.version+ChatColor.RED+")! Your version: "+ChatColor.AQUA+pl.getDescription().getVersion());
+		if(p.isOp() && updater.infoMessageEnabled() && DeathLocation.getUpdater().updateAvailable()) {
+			p.sendMessage(DeathLocation.pr+ChatColor.RED+
+					"A new update is available ("+ChatColor.AQUA+"v"+updater.getLatestVersion()+ChatColor.RED+")!" +
+					"Your version: "+ChatColor.AQUA+updater.getCurrentVersion());
 		}
 	}
 }

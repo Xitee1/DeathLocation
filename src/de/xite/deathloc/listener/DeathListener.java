@@ -15,7 +15,7 @@ import de.xite.deathloc.utils.Actionbar;
 import net.md_5.bungee.api.ChatColor;
 
 public class DeathListener implements Listener{
-	DeathLocation pl = DeathLocation.pl;
+	DeathLocation instance = DeathLocation.getInstance();
 	
 	HashMap<Player, String> waitRespawn = new HashMap<>();
 	
@@ -27,9 +27,9 @@ public class DeathListener implements Listener{
 		int y = loc.getBlockY();
 		int z = loc.getBlockZ();
 		
-		String message = pl.getConfig().getString("message.message");
+		String message = instance.getConfig().getString("message.message");
 		if(message == null) {
-			pl.getLogger().severe("Error: No message found (message.message). Please fix your config.");
+			instance.getLogger().severe("Error: No message found (message.message). Please fix your config.");
 			return;
 		}
 
@@ -43,11 +43,11 @@ public class DeathListener implements Listener{
 		message = ChatColor.translateAlternateColorCodes('&', message);
 
 		// Send message in chat
-		if(pl.getConfig().getBoolean("types.chat-message")) {
-			if(pl.getConfig().getBoolean("message.append")) {
+		if(instance.getConfig().getBoolean("types.chat-message")) {
+			if(instance.getConfig().getBoolean("message.append")) {
 				e.setDeathMessage(e.getDeathMessage() + message);
 			}else {
-				if(pl.getConfig().getBoolean("allPlayers")) {
+				if(instance.getConfig().getBoolean("allPlayers")) {
 					Bukkit.broadcastMessage(message);
 				}else {
 					p.sendMessage(message);
@@ -56,20 +56,20 @@ public class DeathListener implements Listener{
 		}
 
 		// Send message to actionbar
-		if(pl.getConfig().getBoolean("types.actionbar")) {
-			if(pl.getConfig().getBoolean("allPlayers")) {
+		if(instance.getConfig().getBoolean("types.actionbar")) {
+			if(instance.getConfig().getBoolean("allPlayers")) {
 				for(Player all : Bukkit.getOnlinePlayers())
-					Actionbar.sendActionBar(all, message, pl.getConfig().getInt("actionbar.timeout"));
+					Actionbar.sendActionBar(all, message, instance.getConfig().getInt("actionbar.timeout"));
 			}else {
-				Actionbar.sendActionBar(p, message, pl.getConfig().getInt("actionbar.timeout"));
+				Actionbar.sendActionBar(p, message, instance.getConfig().getInt("actionbar.timeout"));
 			}
 		}
 
 
-		if(pl.getConfig().getBoolean("types.title")) {
+		if(instance.getConfig().getBoolean("types.title")) {
 			waitRespawn.put(p, message);
 			// If the player doesn't respawn within 10 minutes, we remove him from the list.
-			Bukkit.getScheduler().runTaskLater(pl, () -> waitRespawn.remove(p), 20*60*10);
+			Bukkit.getScheduler().runTaskLater(instance, () -> waitRespawn.remove(p), 20*60*10);
 		}
 	}
 	
@@ -77,7 +77,7 @@ public class DeathListener implements Listener{
 	public void onRespawn(PlayerRespawnEvent e) {
 		Player p = e.getPlayer();
 		if(waitRespawn.containsKey(p)) {
-			if(pl.getConfig().getBoolean("allPlayers")) {
+			if(instance.getConfig().getBoolean("allPlayers")) {
 				for(Player all : Bukkit.getOnlinePlayers())
 					all.sendTitle(waitRespawn.get(p), "", 5, 20, 5);
 			}else {

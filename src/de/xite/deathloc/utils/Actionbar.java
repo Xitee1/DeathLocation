@@ -10,7 +10,7 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
 public class Actionbar {
-	static DeathLocation pl = DeathLocation.pl;
+	static DeathLocation instance = DeathLocation.getInstance();
 	
     static HashMap<Player, Integer> counter = new HashMap<>();
     static HashMap<Player, String> message = new HashMap<>();
@@ -26,8 +26,8 @@ public class Actionbar {
     }
 
     public static void startActionbarService() {
-    	pl.getLogger().info("ActionBar manager started.");
-    	Bukkit.getScheduler().scheduleSyncRepeatingTask(pl, () -> {
+    	instance.getLogger().info("ActionBar manager started.");
+    	Bukkit.getScheduler().scheduleSyncRepeatingTask(instance, () -> {
 			for(Player p : counter.keySet()) {
 				int count = counter.get(p) - 1;
 

@@ -2,6 +2,7 @@ package de.xite.deathloc.main;
 
 import de.xite.deathloc.listener.DeathListener;
 import de.xite.deathloc.listener.JoinListener;
+import de.xite.deathloc.utils.Updater;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -10,23 +11,30 @@ import de.xite.deathloc.utils.Actionbar;
 import de.xite.deathloc.utils.BStatsMetrics;
 import net.md_5.bungee.api.ChatColor;
 
+import java.util.logging.Logger;
+
 public class DeathLocation extends JavaPlugin {
-	public static DeathLocation pl;
-	public static boolean debug = false;
-	
+	private static final Logger logger = DeathLocation.getInstance().getLogger();
+	private static final int pluginID = 96051;
+	private static boolean debug = false;
+
+	private static DeathLocation instance;
+	private static Updater updater;
+
 	public static String pr = ChatColor.GRAY+"["+ChatColor.YELLOW+"DeathLocation"+ChatColor.GRAY+"] "; // prefix
 	
 	@Override
 	public void onEnable() {
-		pl = this;
+		instance = this;
+		updater = new Updater(pluginID);
 		
 		// Load config
-		pl.getConfig().options().copyDefaults(true);
-		pl.saveDefaultConfig();
-		pl.reloadConfig();
+		instance.getConfig().options().copyDefaults(true);
+		instance.saveDefaultConfig();
+		instance.reloadConfig();
 		
 		// Check if debug is enabled
-		debug = pl.getConfig().getBoolean("debug");
+		debug = instance.getConfig().getBoolean("debug");
 		
 		// Register listeners
 		PluginManager pm = Bukkit.getPluginManager();
@@ -34,33 +42,46 @@ public class DeathLocation extends JavaPlugin {
 		pm.registerEvents(new JoinListener(), this);
 		
 		// Start the ActionBar Manager
-		if(pl.getConfig().getBoolean("types.actionbar"))
+		if(instance.getConfig().getBoolean("types.actionbar"))
 			Actionbar.startActionbarService();
 
-		BStats();
+		initializeBStats();
 	}
 
-	public void BStats(){
+	public static DeathLocation getInstance() {
+		return instance;
+	}
+
+	public static Updater getUpdater() {
+		return updater;
+	}
+
+	public static boolean isDebugEnabled() {
+		return debug;
+	}
+
+
+	public void initializeBStats(){
 		// BStats analytics
 		try {
-			int pluginId = 12730; // <-- Replace with the id of your plugin!
-			BStatsMetrics metrics = new BStatsMetrics(pl, pluginId);
+			int pluginId = 12730;
+			BStatsMetrics metrics = new BStatsMetrics(instance, pluginId);
 			// Custom charts
-			metrics.addCustomChart(new BStatsMetrics.SimplePie("update_auto_update", () -> pl.getConfig().getBoolean("update.autoupdater") ? "Aktiviert" : "Deaktiviert"));
-			metrics.addCustomChart(new BStatsMetrics.SimplePie("update_notifications", () -> pl.getConfig().getBoolean("update.notification") ? "Aktiviert" : "Deaktiviert"));
+			metrics.addCustomChart(new BStatsMetrics.SimplePie("update_auto_update", () -> instance.getConfig().getBoolean("update.autoupdater") ? "Aktiviert" : "Deaktiviert"));
+			metrics.addCustomChart(new BStatsMetrics.SimplePie("update_notifications", () -> instance.getConfig().getBoolean("update.notification") ? "Aktiviert" : "Deaktiviert"));
 
-			metrics.addCustomChart(new BStatsMetrics.SimplePie("use_chat_message", () -> pl.getConfig().getBoolean("types.chat-message") ? "Aktiviert" : "Deaktiviert"));
-			metrics.addCustomChart(new BStatsMetrics.SimplePie("use_actionbar", () -> pl.getConfig().getBoolean("types.actiobar") ? "Aktiviert" : "Deaktiviert"));
-			metrics.addCustomChart(new BStatsMetrics.SimplePie("use_title", () -> pl.getConfig().getBoolean("types.title") ? "Aktiviert" : "Deaktiviert"));
+			metrics.addCustomChart(new BStatsMetrics.SimplePie("use_chat_message", () -> instance.getConfig().getBoolean("types.chat-message") ? "Aktiviert" : "Deaktiviert"));
+			metrics.addCustomChart(new BStatsMetrics.SimplePie("use_actionbar", () -> instance.getConfig().getBoolean("types.actiobar") ? "Aktiviert" : "Deaktiviert"));
+			metrics.addCustomChart(new BStatsMetrics.SimplePie("use_title", () -> instance.getConfig().getBoolean("types.title") ? "Aktiviert" : "Deaktiviert"));
 			
-			metrics.addCustomChart(new BStatsMetrics.SimplePie("allplayers", () -> pl.getConfig().getBoolean("allPlayers") ? "Aktiviert" : "Deaktiviert"));
+			metrics.addCustomChart(new BStatsMetrics.SimplePie("allplayers", () -> instance.getConfig().getBoolean("allPlayers") ? "Aktiviert" : "Deaktiviert"));
 			
-			metrics.addCustomChart(new BStatsMetrics.SimplePie("message_append", () -> pl.getConfig().getBoolean("message.append") ? "Aktiviert" : "Deaktiviert"));
+			metrics.addCustomChart(new BStatsMetrics.SimplePie("message_append", () -> instance.getConfig().getBoolean("message.append") ? "Aktiviert" : "Deaktiviert"));
 
 			if(debug)
-				pl.getLogger().info("Analytics sent to BStat.");
+				instance.getLogger().info("Analytics sent to BStat.");
 		} catch (Exception e) {
-			pl.getLogger().warning("Could not send analytics to BStats.");
+			instance.getLogger().warning("Could not send analytics to BStats.");
 		}
 	}
 }

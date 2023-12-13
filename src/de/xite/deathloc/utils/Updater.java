@@ -3,7 +3,9 @@ package de.xite.deathloc.utils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Date;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 
@@ -11,30 +13,47 @@ import de.xite.deathloc.main.DeathLocation;
 
 
 public class Updater {
-	final private static int pluginID = 96051;
+    private static final Logger logger = DeathLocation.getInstance().getLogger();
+    final private int pluginID;
+    private Date lastUpdated;
+	private String latestVersion;
+    private final String currentVersion;
+    private final boolean infoMessageEnabled;
 
-	public static String version;
+    public Updater(int pluginID) {
+        this.pluginID = pluginID;
+        latestVersion = null;
+        currentVersion = DeathLocation.getInstance().getDescription().getVersion();
+        infoMessageEnabled = DeathLocation.getInstance().getConfig().getBoolean("update.notification");
+    }
 
-    public static String getVersion() {
-        if(version == null) {
+    private void updateVersion() {
+        if(latestVersion == null || new Date().getTime() - lastUpdated.getTime() > 1000*60*60*12) {
+            lastUpdated = new Date();
             try(InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + pluginID).openStream(); Scanner scanner = new Scanner(inputStream)) {
                 if(scanner.hasNext()) {
-                    String d = scanner.next();
-                    version = d;
+                    latestVersion = scanner.next();
                 }
             } catch (IOException e) {
-                DeathLocation.pl.getLogger().info("Updater -> Cannot look for updates: " + e.getMessage());
-                return "Could not check for updates! You probably restarted your server to often, so SpigotMC blocked your IP. You probably have to wait a few minutes or hours.";
+                logger.info("Updater -> Cannot look for updates: " + e.getMessage());
             }
-
-            // Set it to null again after 24h to check again (there might be a new version)
-            Bukkit.getScheduler().runTaskLaterAsynchronously(DeathLocation.pl, () -> version = null, 20*60*60*24);
         }
+    }
 
-        return version;
+    public String getLatestVersion() {
+        updateVersion();
+        return latestVersion;
+    }
+
+    public String getCurrentVersion() {
+        return currentVersion;
     }
     
-    public static boolean checkVersion() {
-		return !getVersion().equals(DeathLocation.pl.getDescription().getVersion());
+    public boolean updateAvailable() {
+		return !getLatestVersion().equals(getCurrentVersion());
 	}
+
+    public boolean infoMessageEnabled() {
+        return infoMessageEnabled;
+    }
 }
