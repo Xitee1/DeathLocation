@@ -14,12 +14,12 @@ import net.md_5.bungee.api.ChatColor;
 import java.util.logging.Logger;
 
 public class DeathLocation extends JavaPlugin {
-	private static final Logger logger = DeathLocation.getInstance().getLogger();
 	private static final int pluginID = 96051;
 	private static boolean debug = false;
 
 	private static DeathLocation instance;
 	private static Updater updater;
+	private static Logger logger;
 
 	public static String pr = ChatColor.GRAY+"["+ChatColor.YELLOW+"DeathLocation"+ChatColor.GRAY+"] "; // prefix
 	
@@ -27,6 +27,7 @@ public class DeathLocation extends JavaPlugin {
 	public void onEnable() {
 		instance = this;
 		updater = new Updater(pluginID);
+		logger = this.getLogger();
 		
 		// Load config
 		instance.getConfig().options().copyDefaults(true);
@@ -44,6 +45,9 @@ public class DeathLocation extends JavaPlugin {
 		// Start the ActionBar Manager
 		if(instance.getConfig().getBoolean("types.actionbar"))
 			Actionbar.startActionbarService();
+
+		if(updater.infoMessageEnabled() && updater.updateAvailable())
+			logger.info("An update is available! Installed version: v"+updater.getCurrentVersion()+", Newest version: "+updater.getLatestVersion());
 
 		initializeBStats();
 	}
