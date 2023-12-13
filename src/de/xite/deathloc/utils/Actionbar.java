@@ -1,5 +1,6 @@
 package de.xite.deathloc.utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
@@ -25,9 +26,17 @@ public class Actionbar {
     	counter.put(p, seconds);
     }
 
+	public static void removeActionbar(Player p, boolean forceRemoveText) {
+		counter.remove(p);
+		message.remove(p);
+		if(forceRemoveText)
+			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(""));
+	}
+
     public static void startActionbarService() {
     	instance.getLogger().info("ActionBar manager started.");
     	Bukkit.getScheduler().scheduleSyncRepeatingTask(instance, () -> {
+			ArrayList<Player> toRemove = new ArrayList<>();
 			for(Player p : counter.keySet()) {
 				int count = counter.get(p) - 1;
 
@@ -35,9 +44,13 @@ public class Actionbar {
 					counter.replace(p, count);
 					sendActionBar(p, message.get(p));
 				}else {
-					counter.remove(p);
-					message.remove(p);
+					toRemove.add(p);
+					toRemove.add(p);
 				}
+			}
+			for(Player p : toRemove) {
+				counter.remove(p);
+				message.remove(p);
 			}
 		}, 20, 20);
     }
