@@ -7,8 +7,6 @@ import java.util.Date;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
-import org.bukkit.Bukkit;
-
 import de.xite.deathloc.main.DeathLocation;
 
 
