@@ -16,39 +16,36 @@ import net.md_5.bungee.api.ChatColor;
 
 public class DeathListener implements Listener{
 	DeathLocation instance = DeathLocation.getInstance();
-	
+
 	HashMap<Player, String> waitRespawn = new HashMap<>();
 	
 	@EventHandler
 	public void onDeath(PlayerDeathEvent e) {
 		Player p = e.getEntity();
-		Location loc = p.getLocation();
-		int x = loc.getBlockX();
-		int y = loc.getBlockY();
-		int z = loc.getBlockZ();
-		
-		String message = instance.getConfig().getString("message.message");
-		if(message == null) {
+
+		String message = translateMessage(instance.getConfig().getString("message.message"), p);
+		String messageOther = translateMessage(instance.getConfig().getString("message.messageOther"), p);
+		if(message == null || messageOther == null) {
 			instance.getLogger().severe("Error: No message found (message.message). Please fix your config.");
 			return;
 		}
 
-		message = message
-				.replace("%x", String.valueOf(x))
-				.replace("%y", String.valueOf(y))
-				.replace("%z", String.valueOf(z))
-				.replace("%player", p.getName())
-				.replace("%displayname", p.getDisplayName());
-
-		message = ChatColor.translateAlternateColorCodes('&', message);
+		// TODO reduce loops
+		// TODO do not directly get config data
 
 		// Send message in chat
 		if(instance.getConfig().getBoolean("types.chat-message")) {
 			if(instance.getConfig().getBoolean("message.append")) {
-				e.setDeathMessage(e.getDeathMessage() + message);
+				e.setDeathMessage(e.getDeathMessage() + messageOther);
 			}else {
 				if(instance.getConfig().getBoolean("allPlayers")) {
-					Bukkit.broadcastMessage(message);
+					for(Player all : instance.getServer().getOnlinePlayers()) {
+						if(all == p) {
+							p.sendMessage(message);
+						} else {
+							all.sendMessage(messageOther);
+						}
+					}
 				}else {
 					p.sendMessage(message);
 				}
@@ -57,9 +54,15 @@ public class DeathListener implements Listener{
 
 		// Send message to actionbar
 		if(instance.getConfig().getBoolean("types.actionbar")) {
+
 			if(instance.getConfig().getBoolean("allPlayers")) {
-				for(Player all : Bukkit.getOnlinePlayers())
-					Actionbar.sendActionBar(all, message, instance.getConfig().getInt("actionbar.timeout"));
+				for(Player all : instance.getServer().getOnlinePlayers()) {
+					if(all == p) {
+						Actionbar.sendActionBar(p, message, instance.getConfig().getInt("actionbar.timeout"));
+					} else {
+						Actionbar.sendActionBar(all, messageOther, instance.getConfig().getInt("actionbar.timeout"));
+					}
+				}
 			}else {
 				Actionbar.sendActionBar(p, message, instance.getConfig().getInt("actionbar.timeout"));
 			}
@@ -86,5 +89,26 @@ public class DeathListener implements Listener{
 			
 			waitRespawn.remove(p);
 		}
+	}
+
+
+	private static String translateMessage(String msg, Player p) {
+		if(msg == null || p == null)
+			return null;
+
+		Location loc = p.getLocation();
+		int x = loc.getBlockX();
+		int y = loc.getBlockY();
+		int z = loc.getBlockZ();
+
+		msg = msg
+				.replace("%x", String.valueOf(x))
+				.replace("%y", String.valueOf(y))
+				.replace("%z", String.valueOf(z))
+				.replace("%player", p.getName())
+				.replace("%displayname", p.getDisplayName());
+
+		msg = ChatColor.translateAlternateColorCodes('&', msg);
+		return msg;
 	}
 }

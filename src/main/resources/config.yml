@@ -7,22 +7,27 @@
 ##############
 ### Config ###
 ##############
-# Where to send the location info
+# In what places the message should appear
 types:
   chat-message: true
   actionbar: true
   title: false
 
 actionbar:
-  timeout: 15 # Duration to show the actionbar for (in seconds)
+  # Duration show duration (in seconds)
+  timeout: 15
 
 # Send the message to all players on the server?
 # Only recommended if you want that other players are easily able to steal someone's stuff or find their base!
 allPlayers: false
 
 message:
-  append: false # The location will be appended to the existing death message (only chat). Warning: Every player will see the location, like the "allPlayers" option!
-  message: '&4You died at &b%x %y %z' # Placeholders: %player, %x, %y, %z
+  # The location will be appended to the existing death message (only chat). Warning: Every player will see the location, like the "allPlayers" option!
+  append: false
+
+  # Placeholders: %player, %displayname, %x, %y, %z
+  message: '&4You died at &b%x %y %z'
+  messageOther: '&4%player died at &b%x %y %z'
 
 
 ######################
