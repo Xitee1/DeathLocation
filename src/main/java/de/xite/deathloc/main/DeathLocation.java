@@ -1,7 +1,9 @@
 package de.xite.deathloc.main;
 
+import de.xite.deathloc.config.PluginConfig;
 import de.xite.deathloc.listener.DeathListener;
-import de.xite.deathloc.listener.JoinListener;
+import de.xite.deathloc.listener.JoinQuitListener;
+import de.xite.deathloc.utils.DeathHandler;
 import de.xite.deathloc.utils.Updater;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
@@ -19,6 +21,8 @@ public class DeathLocation extends JavaPlugin {
 
 	private static DeathLocation instance;
 	private static Updater updater;
+	private static PluginConfig pluginConfig;
+	private static DeathHandler deathHandler;
 	private static Logger logger;
 
 	public static String pr = ChatColor.GRAY+"["+ChatColor.YELLOW+"DeathLocation"+ChatColor.GRAY+"] "; // prefix
@@ -27,12 +31,9 @@ public class DeathLocation extends JavaPlugin {
 	public void onEnable() {
 		instance = this;
 		updater = new Updater(pluginID);
+		pluginConfig = new PluginConfig(this);
+		deathHandler = new DeathHandler();
 		logger = this.getLogger();
-		
-		// Load config
-		instance.getConfig().options().copyDefaults(true);
-		instance.saveDefaultConfig();
-		instance.reloadConfig();
 		
 		// Check if debug is enabled
 		debug = instance.getConfig().getBoolean("debug");
@@ -40,7 +41,7 @@ public class DeathLocation extends JavaPlugin {
 		// Register listeners
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new DeathListener(), this);
-		pm.registerEvents(new JoinListener(), this);
+		pm.registerEvents(new JoinQuitListener(), this);
 		
 		// Start the ActionBar Manager
 		if(instance.getConfig().getBoolean("types.actionbar"))
@@ -58,6 +59,14 @@ public class DeathLocation extends JavaPlugin {
 
 	public static Updater getUpdater() {
 		return updater;
+	}
+
+	public static PluginConfig getPluginConfig() {
+		return pluginConfig;
+	}
+
+	public static DeathHandler getDeathHandler() {
+		return deathHandler;
 	}
 
 	public static boolean isDebugEnabled() {
