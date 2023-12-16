@@ -12,7 +12,7 @@ This plugin is also available at [SpigotMC](https://www.spigotmc.org/resources/d
 2. Restart your Server.
 3. Go into the config file and edit it as you want (plugins/DeathLocation/config.yml).
 4. Restart your Server again to apply the changes.
-5. You're finished!
+5. Enjoy the plugin!
 
 # Compatibility
 This plugin has been tested with Minecraft Version 1.20.1 on Spigot.<br>
