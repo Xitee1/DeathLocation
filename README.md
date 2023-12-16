@@ -3,6 +3,13 @@ I'm sure you already have had that problem. You died, lost your items, but you c
 This plugin helps you with that.
 If you (or any other player on your server) dies, the location will be displayed in the chat / actionbar / title.
 
+# Features
+- Displays the location in the chat (It's also possible to append the location to the existing death message).
+- Displays the location in the ActionBar.
+- Displays the location as title.
+- The death message is customizable.
+- The message with the death location can be broadcast to all players on the server.
+
 ## Download
 Check out the [Releases](https://github.com/Xitee1/DeathLocation/releases).<br>
 This plugin is also available at [SpigotMC](https://www.spigotmc.org/resources/deathlocation.96051/).
@@ -17,10 +24,3 @@ This plugin is also available at [SpigotMC](https://www.spigotmc.org/resources/d
 # Compatibility
 This plugin has been tested with Minecraft Version 1.20.1 on Spigot.<br>
 However, it should be compatible with almost all versions. Just put it on your server and see if it works.
-
-# Features
-- Displays the location in the chat (It's also possible to append the location to the existing death message).
-- Displays the location in the ActionBar.
-- Displays the location as title.
-- The death message is customizable.
-- The message with the death location can be broadcast to all players on the server.
