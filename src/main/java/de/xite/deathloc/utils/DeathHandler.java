@@ -2,7 +2,6 @@ package de.xite.deathloc.utils;
 
 import de.xite.deathloc.main.DeathLocation;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
@@ -15,6 +14,7 @@ public class DeathHandler {
 
     private HashMap<Player, String> waitRespawn;
 
+    private Configuration config;
     private boolean chatMessageEnabled;
     private boolean actionbarEnabled;
     private boolean titleEnabled;
@@ -23,18 +23,19 @@ public class DeathHandler {
     private boolean appendMessage;
     private String message;
     private String messageOther;
+
     public DeathHandler() {
         waitRespawn = new HashMap<>();
 
-        Configuration c = DeathLocation.getPluginConfig().getConfig();
-        chatMessageEnabled = c.getBoolean("types.chat-message");
-        actionbarEnabled = c.getBoolean("types.actionbar");
-        titleEnabled = c.getBoolean("types.title");
-        actionbarTimeout = c.getInt("actionbar.timeout");
-        sendToAllPlayers = c.getBoolean("allPlayers");
-        appendMessage = c.getBoolean("message.append");
-        message = c.getString("message.message");
-        messageOther = c.getString("message.messageOther");
+        config = DeathLocation.getPluginConfig().getConfig();
+        chatMessageEnabled = config.getBoolean("types.chat-message");
+        actionbarEnabled = config.getBoolean("types.actionbar");
+        titleEnabled = config.getBoolean("types.title");
+        actionbarTimeout = config.getInt("actionbar.timeout");
+        sendToAllPlayers = config.getBoolean("allPlayers");
+        appendMessage = config.getBoolean("message.append");
+        message = config.getString("message.message");
+        messageOther = config.getString("message.messageOther");
 
         if(appendMessage && chatMessageEnabled)
             instance.getLogger().warning("You should not enable chat messages and enable appendMessage at the same time!");
@@ -117,6 +118,12 @@ public class DeathHandler {
                 .replace("%z", String.valueOf(z))
                 .replace("%player", p.getName())
                 .replace("%displayname", p.getDisplayName());
+
+        if(msg.contains("%world")) {
+            String woName = loc.getWorld().getName();
+            String woTranslatedName = config.getString("placeholders.worlds."+woName);
+            msg = msg.replace("%world", woTranslatedName != null ? woTranslatedName : woName);
+        }
 
         msg = ChatColor.translateAlternateColorCodes('&', msg);
         return msg;
