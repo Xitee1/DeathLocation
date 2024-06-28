@@ -10,9 +10,13 @@ If you (or any other player on your server) dies, the location will be displayed
 - The death message is customizable.
 - The message with the death location can be broadcast to all players on the server.
 
+## Info
+- View the source code, report bugs, request features and contribute here at GitHub.
+- Get support at [Discord](https://discord.gg/VqK3ctsbz7).
+- This plugin is also published at: [SpigotMC](https://www.spigotmc.org/resources/deathlocation.96051/) and [Modrinth](https://modrinth.com/plugin/deathlocation)
+
 ## Download
-Check out the [Releases](https://github.com/Xitee1/DeathLocation/releases).<br>
-This plugin is also available at [SpigotMC](https://www.spigotmc.org/resources/deathlocation.96051/).
+Check out the [releases](https://github.com/Xitee1/DeathLocation/releases)
 
 ## Install
 1. Download the plugin and put it on your Minecraft Server in the plugins folder.
